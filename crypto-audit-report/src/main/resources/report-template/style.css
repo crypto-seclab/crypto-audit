@@ -1,0 +1,92 @@
+/*
+ * Copyright (c) 2025 Crypto Security Labs
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #fefefe;
+    color: #333;
+}
+
+h1, h2 {
+    color: #222;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.verdict-PASS {
+    color: #1a7f37;
+    font-weight: bold;
+}
+
+.verdict-FAIL {
+    color: #b91c1c;
+    font-weight: bold;
+}
+
+.verdict-UNKNOWN {
+    color: #b45309;
+    font-weight: bold;
+}
+
+.summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.card {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.breadcrumbs {
+    margin: 6px 0 12px;
+}
+
+.filters {
+    display: flex;
+    gap: 12px;
+    margin: 8px 0 12px;
+    align-items: center;
+}
+
+.filters label {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}
+
