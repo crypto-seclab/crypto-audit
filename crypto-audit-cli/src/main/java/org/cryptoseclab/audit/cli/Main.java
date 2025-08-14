@@ -19,6 +19,7 @@ import org.cryptoseclab.audit.policy.Policy;
 import org.cryptoseclab.audit.policy.PolicyEngine;
 import org.cryptoseclab.audit.policy.PolicyYamlLoader;
 import org.cryptoseclab.audit.report.HtmlReportWriter;
+import org.cryptoseclab.audit.report.TextReportWriter;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -59,7 +60,7 @@ public class Main implements Callable<Integer>
     @Option(
             names = "--format",
             description = "Output format: ${COMPLETION-CANDIDATES}",
-            defaultValue = "html"
+            defaultValue = "text"
     )
     private OutputFormat format;
 
@@ -107,10 +108,8 @@ public class Main implements Callable<Integer>
 
         switch (format) {
             case text -> {
-                for (final var entry : analysisResultsMap.entrySet()) {
-                    System.out.printf("Class: %s%n", entry.getKey());
-                    printText(entry.getValue());
-                }
+                final var reportWriter = new TextReportWriter(analysisResultsMap);
+                reportWriter.write();
             }
             case html -> {
                 final var outputDir = input.getParent().resolve("reports");
@@ -120,22 +119,6 @@ public class Main implements Callable<Integer>
             }
         }
         return 0;
-    }
-
-    private void printText(final List<Analysis> results)
-    {
-        results.forEach(r -> System.out.printf(
-                "class=%s:%d  method=%s  api=%s  algorithm=%s provider=%s verdict=%s  reason=%s  " +
-                        "rule=%s%n",
-                r.finding().location().className(),
-                r.finding().location().line(),
-                r.finding().location().methodSignature(),
-                r.finding().api(),
-                r.finding().args().isEmpty() ? "None" : r.finding().args().get(0).printable(),
-                r.finding().args().size() <= 1 ? "None" : r.finding().args().get(1).printable(),
-                r.verdict(), r.reason(), r.ruleId()
-        ));
-        System.out.printf("Total findings: %d%n", results.size());
     }
 
     enum OutputFormat {text, html}
