@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A utility class for loading and normalizing cryptographic policies from YAML files.
@@ -144,7 +145,8 @@ public final class PolicyYamlLoader
                 throw new IllegalStateException("Resource not found: %s".formatted(resourceName));
             }
 
-            return om.readValue(in, Policy.class);
+            final var policy = om.readValue(in, Policy.class);
+            return normalizePolicy(policy);
         }
     }
 

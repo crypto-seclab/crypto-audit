@@ -12,6 +12,7 @@ package org.cryptoseclab.audit.fips;
 
 import org.cryptoseclab.audit.jce.catalog.ArgSpec;
 import org.cryptoseclab.audit.jce.catalog.Catalog;
+import org.cryptoseclab.audit.jce.scan.Finding;
 import org.cryptoseclab.audit.policy.Algorithms;
 import org.cryptoseclab.audit.policy.Analysis;
 import org.cryptoseclab.audit.policy.Policy;
@@ -19,7 +20,6 @@ import org.cryptoseclab.audit.policy.PolicyEngine;
 import org.cryptoseclab.audit.policy.Providers;
 import org.cryptoseclab.audit.policy.Rule;
 import org.cryptoseclab.audit.policy.Verdict;
-import org.cryptoseclab.audit.jce.scan.Finding;
 
 import java.util.Locale;
 import java.util.Map;
@@ -45,24 +45,15 @@ public final class FipsPolicyEngine implements PolicyEngine
     }
 
     /**
-     * Evaluates a cryptographic finding against a given policy.
+     * Evaluates a cryptographic finding against a specific rule in the policy.
      *
      * @param f      the {@link Finding} to evaluate
-     * @param policy the {@link Policy} to evaluate the finding against
+     * @param policy the {@link Policy} containing the rules
+     * @param rule   the {@link Rule} to evaluate against
      * @return an {@link Analysis} object containing the evaluation result
      */
-    @Override
-    public Analysis evaluate(final Finding f, final Policy policy)
+    private Analysis evaluateAgainstRule(final Finding f, final Policy policy, final Rule rule)
     {
-        final Rule rule = policy.rules().stream()
-                .filter(r -> r.api().equals(f.api()))
-                .findFirst()
-                .orElse(null);
-
-        if (rule == null) {
-            return res(f, policy, "NO_POLICY_RULE", Verdict.UNKNOWN, "No rule for API");
-        }
-
         if (!hasAlgorithmArg(f)) {
             return res(f, policy, id(rule), Verdict.PASS, "DEFAULT_ALGO_ALLOWED");
         }
@@ -110,6 +101,49 @@ public final class FipsPolicyEngine implements PolicyEngine
     }
 
     /**
+     * Evaluates a cryptographic finding against a given policy.
+     *
+     * @param f      the {@link Finding} to evaluate
+     * @param policy the {@link Policy} to evaluate the finding against
+     * @return an {@link Analysis} object containing the evaluation result
+     */
+    @Override
+    public Analysis evaluate(final Finding f, final Policy policy)
+    {
+        final var rules = policy.rules().stream()
+                .filter(r -> r.api().equals(f.api()))
+                .toList();
+
+        if (rules.isEmpty()) {
+            return res(f, policy, "NO_POLICY_RULE", Verdict.UNKNOWN, "No rule for API");
+        }
+
+        Analysis firstFail = null;
+
+        for (final Rule r : rules) {
+            Analysis a = evaluateAgainstRule(f, policy, r); // single-rule logic
+            // ensure ruleId is set to the rule that produced this result
+            if (a.ruleId() == null || a.ruleId().isBlank()) {
+                a = a.toBuilder().ruleId(id(r)).build();
+            }
+
+            switch (a.verdict()) {
+                case PASS:
+                    return a; // short-circuit on PASS
+                case UNKNOWN:
+                    return a; // short-circuit on UNKNOWN
+                case FAIL:
+                    firstFail = a; // remember earliest FAIL
+                    // keep trying other rules
+                    break;
+            }
+        }
+        return firstFail != null
+                ? firstFail
+                : res(f, policy, "NO_DECISION", Verdict.UNKNOWN, "NO_DECISION");
+    }
+
+    /**
      * Retrieves the rule ID or a default value if the rule ID is null.
      *
      * @param r the {@link Rule} to retrieve the ID from
@@ -129,6 +163,7 @@ public final class FipsPolicyEngine implements PolicyEngine
     private boolean hasAlgorithmArg(final Finding f)
     {
         final ArgSpec spec = jceApis.get(catalog.key(f.declaringClass(), f.methodName()));
+        if (spec == null) return false;
         final Integer idx = spec.algorithmIndex();
         return idx != null && idx >= 0 && idx < f.args().size();
     }
@@ -161,6 +196,7 @@ public final class FipsPolicyEngine implements PolicyEngine
     private boolean hasProviderArg(final Finding f)
     {
         final ArgSpec spec = jceApis.get(catalog.key(f.declaringClass(), f.methodName()));
+        if (spec == null) return false;
         final Integer idx = spec.providerNameIndex();
         return idx != null && idx >= 0 && idx < f.args().size();
     }

@@ -242,7 +242,7 @@ public final class HtmlReportWriter implements ReportWriter
                     "prov", prov(f),
                     "verdict", a.verdict().name(),
                     "reason", nvl(a.reason()),
-                    "policy", nvl(a.policyId())
+                    "policy", nvl(a.ruleId())
             ));
         }
 
