@@ -47,13 +47,13 @@ public class Main implements Callable<Integer>
 
     @Option(
             names = "--catalog",
-            description = "Path to catalog YAML; if omitted, loads crypto-catalog.yaml from classpath"
+            description = "Path to catalog YAML; if omitted, loads crypto-catalog-jce.yaml from classpath"
     )
     private Path catalogPath;
 
     @Option(
             names = "--policy",
-            description = "Path to policy YAML; if omitted, loads policy-fips.yaml from classpath"
+            description = "Path to policy YAML; if omitted, loads policy-fips-140-2-l1.yaml from classpath"
     )
     private Path policyPath;
 

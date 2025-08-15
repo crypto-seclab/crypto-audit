@@ -127,7 +127,7 @@ public final class PolicyYamlLoader
     }
 
     /**
-     * Loads the default policy from a YAML resource file named "policy-fips.yaml".
+     * Loads the default policy from a YAML resource file named "policy-fips-140-2-l1.yaml".
      *
      * @return the loaded {@link Policy} object
      * @throws IOException           if an I/O error occurs while reading the resource
@@ -135,7 +135,7 @@ public final class PolicyYamlLoader
      */
     public Policy loadDefaultPolicy() throws IOException
     {
-        final String resourceName = "policy-fips.yaml";
+        final String resourceName = "policy-fips-140-2-l1.yaml";
         try (final var in = Thread.currentThread()
                 .getContextClassLoader()
                 .getResourceAsStream(resourceName)) {

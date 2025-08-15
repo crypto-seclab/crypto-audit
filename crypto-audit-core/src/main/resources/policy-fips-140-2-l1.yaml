@@ -1,0 +1,152 @@
+# Copyright (c) 2025 Crypto Security Labs
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# SPDX-License-Identifier: MPL-2.0
+
+# This policy ensures that cryptographic operations comply with FIPS 140-2 Level 1 standards, allowing only approved algorithms and providers.
+# It is designed to be used in conjunction with a catalog of JCE entrypoints that are used to obtain instances of cryptographic algorithms and services.
+# The policy includes rules for various cryptographic operations such as symmetric encryption, key agreement,
+# key wrapping, MAC/HMAC, message digest, PBKDF, and signature operations.
+# Each rule specifies the API, allowed algorithms, and allowed providers.
+# The policy is versioned to allow for future updates and changes to the rules and their specifications.
+
+policyId: 'FIPS-140-2-L1'
+name: 'FIPS 140-2 Level 1 Compliance'
+description: 'This policy ensures that cryptographic operations comply with FIPS 140-2 Level 1 standards, allowing only approved algorithms and providers.'
+version: '2025-08-01'
+rules:
+  - id: 'Cipher-FIPS'
+    description: 'Symmetric encryption/decryption using FIPS-compliant algorithms'
+    api: 'javax.crypto.Cipher.getInstance'
+    algorithms:
+      allow:
+        - 'AES'
+        - 'DESede'
+      allowRegex:
+        - '(?i)^AES/(ECB|CBC|CFB8|CFB128|OFB|CTR|CCM|GCM/FF1)(/[^/]+)?$'
+        - '(?i)^DESede/(ECB|CBC|CFB8|CFB64|OFB|CTR)(/[^/]+)?$'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'Key-Agreement-FIPS'
+    description: 'Key Agreement operations using FIPS-compliant algorithms'
+    api: 'java.security.KeyAgreement.getInstance'
+    algorithms:
+      allow:
+        - 'DH'
+        - 'MQV'
+        - 'ECDH'
+        - 'ECCDH'
+        - 'ECMQV'
+      allowRegex:
+        - '(?i)^DHwithSHA(1|224|256|384|512)KDF$'
+        - '(?i)^DHwithSHA512\(224|256\)KDF$'
+        - '(?i)^DHwithSHA(1|224|256|384|512)CKDF$'
+        - '(?i)^DHwithSHA512\(224|256\)CKDF$'
+        - '(?i)^MQVwithSHA(1|224|256|384|512)KDF$'
+        - '(?i)^MQVwithSHA512\(224|256\)KDF$'
+        - '(?i)^MQVwithSHA(1|224|256|384|512)CKDF$'
+        - '(?i)^MQVwithSHA512\(224|256\)CKDF$'
+        - '(?i)^ECDHwithSHA(1|224|256|384|512)KDF$'
+        - '(?i)^ECCDHwithSHA(1|224|256|384|512)KDF$'
+        - '(?i)^ECCDHwithSHA(1|224|256|384|512)CKDF$'
+        - '(?i)^ECCDHwithSHA512\(224|256\)CKDF$'
+        - '(?i)^ECMQVwithSHA(1|224|256|384|512)KDF$'
+        - '(?i)^ECMQVwithSHA(1|224|256|384|512)CKDF$'
+        - '(?i)^ECMQVwithSHA512\(224|256\)CKDF$'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'Key-Store-FIPS'
+    description: 'KeyStore operations using FIPS-compliant KeyStore types'
+    api: 'java.security.KeyStore.getInstance'
+    algorithms:
+      allow:
+        - 'BCFKS'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'Key-Wrap-FIPS'
+    description: 'Key Wrapping operations using FIPS-compliant algorithms'
+    api: 'javax.crypto.Cipher.getInstance'
+    algorithms:
+      allow:
+        - 'AESKW'
+        - 'AESWrap'
+        - 'AESKWP'
+        - 'AESWrapPad'
+        - 'DESedeTKW'
+        - 'DESedeWrap'
+      allowRegex:
+        - '(?i)^RSA/NONE/OAEPwithSHA(1|224|256|384|512)andMGF1Padding$'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'Key-Transport-FIPS'
+    description: 'Key Transport operations using FIPS-compliant algorithms'
+    api: 'javax.crypto.Cipher.getInstance'
+    algorithms:
+      allow:
+        - 'RSA-KTS-KEM-KWS'
+        - 'RSA-KTS-OAEP'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'MAC-FIPS'
+    description: 'MAC/HMAC operations using FIPS-compliant algorithms'
+    api: 'javax.crypto.Mac.getInstance'
+    algorithms:
+      allowRegex:
+        - '(?i)^HmacSHA(1|224|256|384|512)$'
+        - '(?i)^Hmac128SHA(1|224|256)$'
+        - '(?i)^Hmac256SHA(384|512)$'
+        - '(?i)^HmacSHA512\(224|256\)$'
+        - '(?i)^Hmac128SHA512\(224|256\)$'
+        - '(?i)^HmacSHA3-(224|256|384|512)$'
+        - '(?i)^KMACwithSHAKE(128|256)$'
+        - '(?i)^DESede[-]?CMAC$'
+  - id: 'Message-Digest-FIPS'
+    description: 'Message Digest operations using FIPS-compliant algorithms'
+    api: 'java.security.MessageDigest.getInstance'
+    algorithms:
+      allow:
+        - 'SHA'
+      allowRegex:
+        - '(?i)^SHA[-]?(1|224|256|384|512)$'
+        - '(?i)^SHA[-]?512\(224|256\)$'
+        - '(?i)^SHA3-(224|256|384|512)$'
+        - '(?i)^SHAKE(128|256)$'
+      deny:
+        - 'MD5'
+    providers:
+      allow:
+        - 'BCFIPS'
+  - id: 'PBKDF-FIPS'
+    description: 'Password Based Key Derivation Functions using FIPS-compliant algorithms'
+    api: 'javax.crypto.SecretKeyFactory.getInstance'
+    algorithms:
+      allow:
+          - 'PBKDF2'
+          - 'PBKDF2with8BIT'
+      allowRegex:
+        - '(?i)^PBKDF2withHmacSHA(1|224|256|384|512)$'
+  - id: 'Signature-FIPS'
+    description: 'Signature operations using FIPS-compliant algorithms'
+    api: 'java.security.Signature.getInstance'
+    algorithms:
+      allowRegex:
+        - '(?i)^SHA(1|224|256|384|512)with(DSA|ECDSA|RSA)$'
+        - '(?i)^SHA512\(224|256\)with(DSA|ECDSA|RSA)$'
+        - '(?i)^SHA3-(224|256|384|512)with(DSA|ECDSA|RSA)$'
+        - '(?i)^SHA(1|224|256|384|512)with(RSAandMGF1|RSA/PSS)$'
+        - '(?i)^SHA512\(224|256\)with(RSAandMGF1|RSA/PSS)$'
+        - '(?i)^SHA3-(224|256|384|512)with(RSAandMGF1|RSA/PSS)$'
+        - '(?i)^SHA(1|224|256|384|512)withRSA/X9.31$'
+        - '(?i)^SHA512\(224|256\)withRSA/X9.31$'
+  - id: 'SR-FIPS-1'
+    api: 'java.security.SecureRandom.getInstance'
+  - id: 'SR-FIPS-2'
+    api: 'java.security.SecureRandom.getInstanceStrong'

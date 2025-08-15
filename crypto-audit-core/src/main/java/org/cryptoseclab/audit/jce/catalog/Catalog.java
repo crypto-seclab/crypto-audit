@@ -22,12 +22,16 @@ import java.util.Objects;
  * catalog ID, version, and a list of API entries.
  *
  * @param catalogId the unique identifier for the catalog (e.g., "jce-entrypoints-v1"), must not be null
+ * @param name     the human-readable name of the catalog
+ * @param description the description of the catalog
  * @param version   the optional semantic version or date of the catalog
  * @param apis      the list of API entries to collect as findings, must not be null
  */
 @Builder(toBuilder = true)
 public record Catalog(
         String catalogId,
+        String name,
+        String description,
         String version,
         List<ApiEntry> apis
 )

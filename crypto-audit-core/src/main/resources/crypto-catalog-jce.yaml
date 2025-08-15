@@ -1,0 +1,142 @@
+# Copyright (c) 2025 Crypto Security Labs
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# SPDX-License-Identifier: MPL-2.0
+
+# This catalog contains JCE entrypoints that are used to obtain instances of cryptographic algorithms and services. 
+# It is designed to be used in conjunction with a policy to ensure that only compliant algorithms and providers are used in cryptographic operations. 
+#  e.g. FIPS 140-2 Level 1 policy for ensuring that only FIPS-compliant algorithms and providers are used.
+# The catalog includes APIs for obtaining instances of various cryptographic services such as Cipher, KeyAgreement,
+# KeyFactory, KeyStore, and others. Each API entry specifies the class name, method name, and any relevant argument specifications.
+# The catalog is versioned to allow for future updates and changes to the APIs and their specifications.
+
+catalogId: 'jce-entrypoints-v1'
+name: 'JCE Entry Points Catalog'
+description: 'This catalog contains JCE entrypoints that are used to obtain instances of cryptographic algorithms and services.'
+version: '2025-08-01'
+apis:
+  - api:
+      className: 'java.security.AlgorithmParameterGenerator'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.AlgorithmParameters'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.cert.CertPathBuilder'
+      methodName: 'getDefaultType'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.cert.CertPathBuilder'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.cert.CertPathValidator'
+      methodName: 'getDefaultType'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.cert.CertPathValidator'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.cert.CertificateFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.cert.CertStore'
+      methodName: 'getDefaultType'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.cert.CertStore'
+      methodName: 'getInstance'
+    argSpec: { algorithmIndex: 0, providerNameIndex: 2, providerObjectIndex: 2 }
+  - api:
+      className: 'javax.crypto.Cipher'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.KeyAgreement'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.KeyFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.net.ssl.KeyManagerFactory'
+      methodName: 'getDefaultAlgorithm'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'javax.net.ssl.KeyManagerFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.crypto.KEM'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.crypto.KeyGenerator'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.KeyPairGenerator'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.KeyStore'
+      methodName: 'getDefaultType'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.KeyStore'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.crypto.Mac'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.MessageDigest'
+      methodName: 'getInstance'
+  - api:
+      className: 'java.security.SecureRandom'
+      methodName: 'getInstance'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.SecureRandom'
+      methodName: 'getInstanceStrong'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'java.security.Signature'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.net.ssl.SSLContext'
+      methodName: 'getDefault'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'javax.net.ssl.SSLContext'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.net.ssl.SSLContext'
+      methodName: 'setDefault'
+  - api:
+      className: 'javax.crypto.SecretKeyFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.smartcardio.TerminalFactory'
+      methodName: 'getDefault'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'javax.smartcardio.TerminalFactory'
+      methodName: 'getDefaultType'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'javax.smartcardio.TerminalFactory'
+      methodName: 'getInstance'
+    argSpec: { algorithmIndex: 0, providerNameIndex: 2, providerObjectIndex: 2 }
+  - api:
+      className: 'javax.net.ssl.TrustManagerFactory'
+      methodName: 'getDefaultAlgorithm'
+    argSpec: { algorithmIndex: -1, providerNameIndex: -1, providerObjectIndex: -1 }
+  - api:
+      className: 'javax.net.ssl.TrustManagerFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.xml.crypto.dsig.TransformService'
+      methodName: 'getInstance'
+    argSpec: { algorithmIndex: 0, providerNameIndex: 2, providerObjectIndex: 2 }
+  - api:
+      className: 'javax.xml.crypto.dsig.XMLSignatureFactory'
+      methodName: 'getInstance'
+  - api:
+      className: 'javax.xml.crypto.dsig.keyinfo.KeyInfoFactory'
+      methodName: 'getInstance'

@@ -23,6 +23,7 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record Rule(
         String id,
+        String description,
         String api,
         Algorithms algorithms,
         Providers providers

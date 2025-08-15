@@ -37,7 +37,7 @@ public final class CatalogYamlLoader
     }
 
     /**
-     * Loads the default catalog from a YAML resource file named "crypto-catalog.yaml".
+     * Loads the default catalog from a YAML resource file named "crypto-catalog-jce.yaml".
      *
      * @return the loaded {@link Catalog} object
      * @throws IOException           if an I/O error occurs while reading the resource
@@ -45,7 +45,7 @@ public final class CatalogYamlLoader
      */
     public Catalog loadDefaultCatalog() throws IOException
     {
-        final String resourceName = "crypto-catalog.yaml";
+        final String resourceName = "crypto-catalog-jce.yaml";
         try (final var in = Thread.currentThread()
                 .getContextClassLoader()
                 .getResourceAsStream(resourceName)) {

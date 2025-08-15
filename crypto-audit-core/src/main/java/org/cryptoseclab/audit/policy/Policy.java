@@ -18,13 +18,17 @@ import java.util.List;
  * Represents a cryptographic policy, which includes a unique identifier,
  * a version, and a list of rules that define the policy's behavior.
  *
- * @param policyId the unique identifier for the policy (e.g., "FIPS-140-3"), must not be null
- * @param version  the version of the policy (e.g., "1.0"), may be null
- * @param rules    the list of {@link Rule} objects that define the policy, may be null
+ * @param policyId the unique identifier for the policy (e.g., "FIPS-140-3")
+ * @param name the human-readable name of the policy (e.g., "FIPS 140-3 Level 1")
+ * @param description the description of the policy
+ * @param version  the version of the policy (e.g., "1.0")
+ * @param rules    the list of {@link Rule} objects that define the policy
  */
 @Builder(toBuilder = true)
 public record Policy(
         String policyId,
+        String name,
+        String description,
         String version,
         List<Rule> rules
 )
